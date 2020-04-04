@@ -63,7 +63,7 @@ const router = new IonicVueRouter({
 })
 
 const apolloClient = new ApolloClient({
-  uri: 'https://countries.trevorblades.com/'
+  uri: 'https://c2c-backend.lars.ninja/graphql'
 })
 
 const apolloProvider = new VueApollo({
