@@ -11,7 +11,7 @@
 
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1">
-          <ion-icon name="person" />
+          <ion-icon name="person" /> 
         </ion-tab-button>
 
         <ion-tab-button tab="tab2">
