@@ -1,10 +1,5 @@
 <template>
   <ion-page class="ion-page">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Orders</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content padding>
       <ion-list lines="full" mode="ios">
         <ion-card v-for="continent in continents" v-bind:key="continent.name">

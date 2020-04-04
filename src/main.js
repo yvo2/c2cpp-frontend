@@ -38,16 +38,6 @@ const router = new IonicVueRouter({
           }
         },
         {
-          path: "tab1/details",
-          name: "tab1-details",
-          components: {
-            tab1: () =>
-              import(
-                /* webpackChunkName: "tab1" */ "@/pages/Tab1Details.vue"
-              )
-          }
-        },
-        {
           path: "tab2",
           name: "tab2",
           components: {
@@ -61,6 +51,11 @@ const router = new IonicVueRouter({
       path: "/login",
       component: () =>
         import("@/pages/Login.vue"),
+    },
+    {
+      path: "/map",
+      component: () =>
+        import("@/pages/Map.vue"),
     },
     { path: "/", redirect: "login" }
   ]
