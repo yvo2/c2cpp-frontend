@@ -5,11 +5,17 @@ import Ionic from "@ionic/vue";
 import "@ionic/core/css/core.css";
 import "@ionic/core/css/ionic.bundle.css";
 
-Vue.config.productionTip = false;
+import ApolloClient from 'apollo-boost'
+import VueApollo from 'vue-apollo'
 
 import { IonicVueRouter } from "@ionic/vue";
+
+
+Vue.use(VueApollo)
 Vue.use(IonicVueRouter);
 Vue.use(Ionic);
+
+Vue.config.productionTip = false;
 
 const router = new IonicVueRouter({
   mode: "history",
@@ -51,7 +57,18 @@ const router = new IonicVueRouter({
     { path: "/", redirect: "tabs/tab1" }
   ]
 });
+
+const apolloClient = new ApolloClient({
+  uri: 'https://countries.trevorblades.com/'
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
+
 new Vue({
   router,
+  apolloProvider,
   render: h => h(App)
 }).$mount("#app");

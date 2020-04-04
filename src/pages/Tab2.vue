@@ -6,14 +6,23 @@
       </ion-toolbar>
     </ion-header>
     <ion-content padding>
-      <ion-item>THIS IS TAB 2</ion-item>
+      {{ continents }}
     </ion-content>
   </ion-page>
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
 export default {
-  name: "tab2"
+  name: "tab2",
+  apollo: {
+    continents: gql`query {
+      continents {
+        name
+      }
+    }`,
+  }
 };
 </script>
 
