@@ -2,16 +2,14 @@
   <ion-page class="ion-page">
     <ion-content padding>
       <ion-list lines="full" mode="ios">
-        <ion-card v-for="continent in continents" v-bind:key="continent.name">
+        <ion-card v-for="order in allOrders" v-bind:key="order.id">
           <ion-card-header>
-            <ion-card-title>{{continent.name}}</ion-card-title>
+            <ion-card-title>{{order.sender}}</ion-card-title>
           </ion-card-header>
-
           <ion-card-content>
-            I would like to get some milk and also other stufff please. Go out with doggo and do the garden. Thanks
-            
+            {{order.text}}
           </ion-card-content>
-          <button class="red" @click="removeOrder(continent)">Deny</button>
+          <button class="red" @click="removeOrder(order)">Deny</button>
           <button class="green" @click="presentAlertRadio">Accept</button>
         </ion-card>
       </ion-list>
@@ -25,11 +23,16 @@ import gql from 'graphql-tag'
 export default {
   name: "tab2",
   apollo: {
-    continents: gql`query {
-      continents {
-        name,
-        countries{
-          name
+    allOrders: gql`query GetOrders {
+      allOrders {
+        id,
+        text,
+        sender,
+        status,
+        assigned {
+          firstName,
+          lastName,
+          email
         }
       }
     }`,
