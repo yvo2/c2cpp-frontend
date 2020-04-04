@@ -1,7 +1,7 @@
 <template>
   <div>
     <ion-tabs>
-      <ion-tab tab="tab1" :routes="['tab1', 'tab1-details']">
+      <ion-tab tab="tab1" :routes="['tab1']">
         <ion-vue-router name="tab1"></ion-vue-router>
       </ion-tab>
 

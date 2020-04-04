@@ -1,10 +1,5 @@
 <template>
   <ion-page class="ion-page">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Orders</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content padding>
       <ion-list lines="full" mode="ios">
         <ion-card v-for="continent in continents" v-bind:key="continent.name">
@@ -17,7 +12,7 @@
             
           </ion-card-content>
           <button class="red" @click="removeOrder(continent)">Deny</button>
-          <button class="green">Accept</button>
+          <button class="green" @click="presentAlertRadio">Accept</button>
         </ion-card>
       </ion-list>
     </ion-content>
@@ -46,7 +41,48 @@ export default {
       if(index > -1){
         this.continents.splice(index, 1);
       }
-    }
+    },
+    presentAlertRadio() {
+      return this.$ionic.alertController
+        .create({
+          header: 'Select Timeframe',
+          inputs: [
+            {
+              type: 'radio',
+              label: 'now',
+              value: 'now',
+              checked: true,
+            },
+            {
+              type: 'radio',
+              label: 'in 1 Hour',
+              value: '1h',
+            },
+            {
+              type: 'radio',
+              label: 'in 3 Hours',
+              value: '3h',
+            }
+          ],
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {
+                console.log('Cancelled')
+              },
+            },
+            {
+              text: 'Ok',
+              handler: () => {
+                console.log('Confirm Ok')
+              },
+            },
+          ],
+        })
+        .then(a => a.present())
+    },
   }
 };
 </script>

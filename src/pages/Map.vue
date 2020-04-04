@@ -1,17 +1,18 @@
 <template>
   <ion-page class="ion-page">
     <ion-content padding>
-      <ion-button @click="nextPage()">Next Page</ion-button>
+      <ion-button @click="back()" class="backButton">Back</ion-button>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 export default {
-  name: "tab1",
+  name: "Map",
   methods: {
-    nextPage() {
-      this.$router.push({ path: "/map" });
+    back() {
+      this.$router.push({ name: "tab1" });
     }
   },
   onCreate() {}
@@ -19,4 +20,9 @@ export default {
 </script>
 
 <style>
+
+.backButton {
+  margin-top: 20px;
+}
+
 </style>
