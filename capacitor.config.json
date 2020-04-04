@@ -1,0 +1,8 @@
+{
+  "appId": "com.c2cpp.frontend",
+  "appName": "c2cpp-frontend",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "cordova": {}
+}
