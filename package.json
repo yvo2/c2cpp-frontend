@@ -12,6 +12,7 @@
     "@capacitor/core": "^2.0.0",
     "@ionic/core": "^5.0.7",
     "@ionic/vue": "0.0.9",
+    "ionicons": "^4.6.3",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
