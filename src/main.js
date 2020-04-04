@@ -1,6 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
 
+import Vuex from 'vuex'
+
 import Ionic from "@ionic/vue";
 import "@ionic/core/css/core.css";
 import "@ionic/core/css/ionic.bundle.css";
@@ -14,6 +16,7 @@ import { IonicVueRouter } from "@ionic/vue";
 Vue.use(VueApollo)
 Vue.use(IonicVueRouter);
 Vue.use(Ionic);
+Vue.use(Vuex)
 
 Vue.config.productionTip = false;
 
@@ -54,9 +57,14 @@ const router = new IonicVueRouter({
         }
       ]
     },
-    { path: "/", redirect: "tabs/tab1" }
+    {
+      path: "/login",
+      component: () =>
+        import("@/pages/Login.vue"),
+    },
+    { path: "/", redirect: "login" }
   ]
-});
+})
 
 const apolloClient = new ApolloClient({
   uri: 'https://countries.trevorblades.com/'
@@ -66,9 +74,24 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 })
 
+const store = new Vuex.Store({
+  state: {
+    token: null
+  },
+  mutations: {
+    setToken (state, token) {
+      state.token = token
+    },
+    getToken(state) {
+      return state.token
+    }
+  }
+})
+
 
 new Vue({
   router,
   apolloProvider,
+  store,
   render: h => h(App)
 }).$mount("#app");

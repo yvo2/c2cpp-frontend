@@ -5,6 +5,10 @@
         <ion-vue-router name="tab1"></ion-vue-router>
       </ion-tab>
 
+      <ion-tab tab="login" :routes="['login']">
+        <ion-vue-router name="login"></ion-vue-router>
+      </ion-tab>
+
       <ion-tab tab="tab2" :routes="['tab2']">
         <ion-vue-router name="tab2"></ion-vue-router>
       </ion-tab>
@@ -26,14 +30,16 @@
 <script>
 import { person, map } from "ionicons/icons";
 import { addIcons } from "ionicons";
+
 addIcons({
   "ios-person": person.ios,
   "md-person": person.md,
   "ios-map": map.ios,
   "md-map": map.md
 });
+
 export default {
   name: "HelloWorld",
-  props: {}
+  props: {},
 };
 </script>
