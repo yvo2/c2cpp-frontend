@@ -14,7 +14,7 @@
             <input type="email" class="input" placeholder="Email" />
             <input type="password" class="input" placeholder="Password" />
           </div>
-          <button class="submit-btn">Sign up</button>
+          <ion-button color="light" size="small" style="margin-top: 15px; width: 100%">Sign up</ion-button>
         </div>
         <div class="login" :class="{'slide-up': activeContainer === 'signup'}">
           <div class="center">
@@ -27,7 +27,7 @@
               <input type="email" class="input" placeholder="Email" />
               <input type="password" class="input" placeholder="Password" />
             </div>
-            <button class="submit-btn">Log in</button>
+            <ion-button color="medium" size="small" style="margin-top: 15px; width: 100%">Log in</ion-button>
           </div>
         </div>
       </div>
@@ -60,6 +60,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body {
+  overflow: hidden;
+}
+
 .form-structor {
   background-color: #222;
   height: 100%;
@@ -127,7 +131,7 @@ export default {
     }
 
     .form-holder {
-      border-radius: 15px;
+      border-radius: 10px;
       background-color: #fff;
       overflow: hidden;
       margin-top: 50px;
@@ -140,9 +144,9 @@ export default {
         outline: none;
         box-shadow: none;
         display: block;
-        height: 30px;
-        line-height: 30px;
-        padding: 8px 15px;
+        height: 35px;
+        line-height: 35px;
+        padding: 10px 15px;
         border-bottom: 1px solid #eee;
         width: 100%;
         font-size: 12px;
@@ -153,28 +157,6 @@ export default {
         &::input-placeholder {
           color: rgba(0, 0, 0, 0.4);
         }
-      }
-    }
-
-    .submit-btn {
-      background-color: rgba(0, 0, 0, 0.4);
-      color: rgba(256, 256, 256, 0.7);
-      border: 0;
-      border-radius: 15px;
-      display: block;
-      margin: 15px auto;
-      padding: 15px 45px;
-      width: 100%;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      opacity: 1;
-      visibility: visible;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transition: all 0.3s ease;
-        background-color: rgba(0, 0, 0, 0.8);
       }
     }
   }
@@ -226,7 +208,7 @@ export default {
       }
 
       .form-holder {
-        border-radius: 15px;
+        border-radius: 10px;
         background-color: #fff;
         border: 1px solid #eee;
         overflow: hidden;
@@ -240,9 +222,9 @@ export default {
           outline: none;
           box-shadow: none;
           display: block;
-          height: 30px;
-          line-height: 30px;
-          padding: 8px 15px;
+          height: 35px;
+          line-height: 35px;
+          padding: 10px 15px;
           border-bottom: 1px solid #eee;
           width: 100%;
           font-size: 12px;
