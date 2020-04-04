@@ -6,7 +6,11 @@
       </ion-toolbar>
     </ion-header>
     <ion-content padding>
-      {{ continents }}
+      <ion-list>
+        <ion-item v-for="continent in continents" v-bind:key="continent.name">
+          {{continent.name}}
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ion-page>
 </template>
