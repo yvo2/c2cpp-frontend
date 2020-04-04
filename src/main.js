@@ -59,8 +59,9 @@ const router = new IonicVueRouter({
     },
     {
       path: "/login",
+      alias: "/signup",
       component: () =>
-        import("@/pages/Login.vue"),
+        import("@/pages/Onboarding.vue"),
     },
     { path: "/", redirect: "login" }
   ]
