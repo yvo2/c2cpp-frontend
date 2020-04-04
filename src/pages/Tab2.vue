@@ -16,7 +16,7 @@
             I would like to get some milk and also other stufff please. Go out with doggo and do the garden. Thanks
             
           </ion-card-content>
-          <button class="red">Deny</button>
+          <button class="red" @click="removeOrder(continent)">Deny</button>
           <button class="green">Accept</button>
         </ion-card>
       </ion-list>
@@ -38,6 +38,15 @@ export default {
         }
       }
     }`,
+  },
+  methods: {
+    removeOrder(continent){
+      let index = this.continents.indexOf(continent);
+
+      if(index > -1){
+        this.continents.splice(index, 1);
+      }
+    }
   }
 };
 </script>
