@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     myOpenOrders() {
-      return this.myOrders ? this.myOrders.filter(order => order.status === "OPEN") : []
+      return this.myOrders ? this.myOrders.filter(order => order.status === "ASSIGNED") : []
     }
   },
   methods: {
