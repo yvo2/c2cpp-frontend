@@ -1,0 +1,7 @@
+{
+  "name": "c2cpp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
