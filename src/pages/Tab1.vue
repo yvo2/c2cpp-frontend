@@ -17,7 +17,14 @@
         </ion-card>
       </ion-list>
       <p v-else>There are no orders assigned to you right now! :)</p>
-      <ion-button @click="nextPage()">Next Page</ion-button>
+      <div class="navigation">
+      <a
+        :href="`https://www.google.com/maps/dir/?api=1&origin=&destination=bern&travelmode=bicycling`"
+        target="_blank"
+      >
+        <ion-button expand="full" color="success">Start navigation!</ion-button>
+      </a>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -106,5 +113,16 @@ ion-card button {
 
 .green:active {
   background-color: #23a959;
+}
+
+.navigation {
+  position: absolute;
+  bottom: 10px;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.navigation > a {
+  text-decoration: none;
 }
 </style>
