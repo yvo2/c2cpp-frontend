@@ -5,9 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "ionic:build": "vue-cli-service build",
+    "ionic:serve": "vue-cli-service serve"
   },
   "dependencies": {
+    "@capacitor/android": "^2.0.0",
     "@capacitor/cli": "^2.0.0",
     "@capacitor/core": "^2.0.0",
     "@ionic/core": "^5.0.7",

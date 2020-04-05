@@ -1,0 +1,7 @@
+{
+  "name": "c2ccp-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
