@@ -14,7 +14,7 @@ Vue.config.productionTip = false;
 
 new Vue({
   router,
-  apollo,
+  apolloProvider: apollo,
   store,
   render: h => h(App)
 }).$mount("#app");
