@@ -83,14 +83,14 @@
               </h2>
             </router-link>
             <div class="form-holder">
-              <input
+              <ion-input
                 type="email"
                 class="input"
                 placeholder="Email"
                 :value="loginEmail"
                 @input="loginEmail = $event.target.value"
               />
-              <input
+              <ion-input
                 type="password"
                 class="input"
                 placeholder="Password"
@@ -114,6 +114,7 @@
         </form>
       </div>
     </ion-content>
+    <ion-alert-controller></ion-alert-controller>
   </ion-page>
 </template>
 
@@ -143,6 +144,20 @@ export default {
     }
   },
   methods: {
+    showLoginError() {
+      document
+        .querySelector("ion-alert-controller")
+        .create({
+          header: "Login failed!",
+          message: `Could not login, please try again`,
+          buttons: [
+            {
+              text: "OK"
+            }
+          ]
+        })
+        .then(alert => alert.present());
+    },
     login() {
       const loginEmail = this.loginEmail;
       const loginPassword = this.loginPassword;
@@ -157,7 +172,7 @@ export default {
               login(password: $password, email: $email) {
                 accessToken
                 error
-              } 
+              }
             }
           `,
           variables: {
@@ -166,15 +181,18 @@ export default {
           }
         })
         .then(res => {
-          if (res.data.error) {
-            // todo
+          if (res.data.login.error) {
+            this.showLoginError();
+
+            this.loginEmail = loginEmail;
+            this.loginPassword = loginPassword;
           } else {
-            console.log(res.data.accessToken)
+            console.log(res.data.login.accessToken);
             this.$router.push({ name: "tab1" });
           }
         })
-        .catch(error => {
-          console.error(JSON.stringify(error.message));
+        .catch(() => {
+          this.showLoginError();
 
           this.loginEmail = loginEmail;
           this.loginPassword = loginPassword;
@@ -196,7 +214,9 @@ export default {
           mutation: gql`
             mutation($newUser: UserNew!) {
               register(newUserData: $newUser) {
-                id
+                access {
+                  accessToken
+                }
               }
             }
           `,
@@ -210,12 +230,23 @@ export default {
           }
         })
         .then(data => {
-          console.log(data);
+          console.log(data.register.access.accessToken);
           this.$router.push({ name: "tab1" });
         })
         .catch(error => {
           if (error.message.includes("EMAIL_EXIST")) {
-            console.log("Email exists!")
+            document
+              .querySelector("ion-alert-controller")
+              .create({
+                header: "Email exists!",
+                message: `Email address "<strong>${signUpEmail}</strong>" already exists. Please use a different one or log in`,
+                buttons: [
+                  {
+                    text: "OK"
+                  }
+                ]
+              })
+              .then(alert => alert.present());
           }
 
           this.signUpFirstName = signUpFirstName;
