@@ -1,6 +1,6 @@
 {
-  "appId": "com.c2cpp.frontend",
-  "appName": "c2cpp-frontend",
+  "appId": "io.ionic.starter",
+  "appName": "c2ccp-frontend",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
