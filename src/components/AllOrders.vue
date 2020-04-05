@@ -1,6 +1,9 @@
 <template>
   <ion-page class="ion-page">
-    <ion-content padding>
+    <ion-content padding style="text-align: left">
+      <ion-text>
+        <h1 style="font-weight: 600; margin: 35px 15px">All Orders</h1>
+      </ion-text>
       <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
@@ -20,7 +23,7 @@
           <button class="green" @click="presentDeliveryAlert(order)">Accept</button>
         </ion-card>
       </ion-list>
-      <p v-else>There are no open order right now! :)</p>
+      <p v-else style="padding: 0 15px">There are no open orders right now! :)</p>
     </ion-content>
   </ion-page>
 </template>
@@ -69,7 +72,7 @@ export default {
         const isLoading = setInterval(function() {
           if (!self.$apollo.queries.allOrders.loading) {
             event.target.complete();
-            clearInterval(isLoading)
+            clearInterval(isLoading);
           }
         }, 100);
       }, 500);

@@ -8,24 +8,24 @@ export default new IonicVueRouter({
     base: "/",
     routes: [
         {
-            path: "/tabs",
+            path: "/",
             component: () =>
-                import(/* webpackChunkName: "home" */ "@/pages/HomePage.vue"),
+                import(/* webpackChunkName: "home" */ "@/pages/Home.vue"),
             children: [
                 {
-                    path: "tab1",
-                    name: "tab1",
+                    path: "my-orders",
+                    name: "myOrders",
                     components: {
-                        tab1: () =>
-                            import(/* webpackChunkName: "tab1" */ "@/pages/Tab1.vue")
+                        myOrders: () =>
+                            import(/* webpackChunkName: "myOrders" */ "@/components/MyOrders.vue")
                     }
                 },
                 {
-                    path: "tab2",
-                    name: "tab2",
+                    path: "all-orders",
+                    name: "allOrders",
                     components: {
-                        tab2: () =>
-                            import(/* webpackChunkName: "tab2" */ "@/pages/Tab2.vue")
+                        allOrders: () =>
+                            import(/* webpackChunkName: "allOrders" */ "@/components/AllOrders.vue")
                     }
                 }
             ]
@@ -35,12 +35,6 @@ export default new IonicVueRouter({
             alias: "/signup",
             component: () =>
                 import("@/pages/Onboarding.vue"),
-        },
-        {
-            path: "/map",
-            component: () =>
-                import("@/pages/Map.vue"),
-        },
-        { path: "/", redirect: "login" }
+        }
     ]
 })

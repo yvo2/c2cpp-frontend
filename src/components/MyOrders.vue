@@ -1,33 +1,38 @@
 <template>
   <ion-page class="ion-page">
-    <ion-content padding>
+    <ion-content padding style="text-align: left">
       <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
-      <ion-list v-if="myOpenOrders.length > 0" lines="full" mode="ios">
-        <ion-card v-for="order in myOpenOrders" v-bind:key="order.id">
-          <ion-card-header>
-            <ion-card-title>{{order.sender}}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content style="text-align: left">
-            <b>Text:</b>
-            {{order.text}}
-            <br />
-            <b>Address:</b>
-            {{order.address}}
-          </ion-card-content>
-          <button class="green" @click="completeOrder(order)">Complete</button>
-        </ion-card>
-      </ion-list>
-      <p v-else>There are no orders assigned to you right now! :)</p>
-      <div class="navigation">
-      <a
-        :href="`https://www.google.com/maps/dir/?api=1&origin=&destination=bern&travelmode=bicycling`"
-        target="_blank"
-      >
-        <ion-button expand="full" color="success">Start navigation!</ion-button>
-      </a>
+      <ion-text>
+        <h1 style="font-weight: 600; margin: 35px 15px">My Orders</h1>
+      </ion-text>
+      <div v-if="myOpenOrders.length > 0">
+        <ion-list lines="full" mode="ios">
+          <ion-card v-for="order in myOpenOrders" v-bind:key="order.id">
+            <ion-card-header>
+              <ion-card-title>{{order.sender}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content style="text-align: left">
+              <b>Text:</b>
+              {{order.text}}
+              <br />
+              <b>Address:</b>
+              {{order.address}}
+            </ion-card-content>
+            <button class="green" @click="completeOrder(order)">Complete</button>
+          </ion-card>
+        </ion-list>
+        <div class="navigation">
+          <a
+            :href="`https://www.google.com/maps/dir/?api=1&origin=&destination=bern&travelmode=bicycling`"
+            target="_blank"
+          >
+            <ion-button expand="full" color="success">Start navigation!</ion-button>
+          </a>
+        </div>
       </div>
+      <p v-else style="padding: 0 15px">There are no orders assigned to you right now! :)</p>
     </ion-content>
   </ion-page>
 </template>
@@ -36,7 +41,7 @@
 import gql from "graphql-tag";
 
 export default {
-  name: "tab1",
+  name: "myOrders",
   apollo: {
     myOrders: gql`
       query GetMyOrders {
@@ -57,7 +62,9 @@ export default {
   },
   computed: {
     myOpenOrders() {
-      return this.myOrders ? this.myOrders.filter(order => order.status === "ASSIGNED") : []
+      return this.myOrders
+        ? this.myOrders.filter(order => order.status === "ASSIGNED")
+        : [];
     }
   },
   methods: {
@@ -68,7 +75,7 @@ export default {
         const isLoading = setInterval(function() {
           if (!self.$apollo.queries.myOrders.loading) {
             event.target.complete();
-            clearInterval(isLoading)
+            clearInterval(isLoading);
           }
         }, 100);
       }, 500);
@@ -103,14 +110,13 @@ export default {
       if (index > -1) {
         this.myOrders.splice(index, 1);
       }
-    },
+    }
   },
   onCreate() {}
 };
 </script>
 
 <style scoped>
-
 button {
   color: white;
   text-align: center;

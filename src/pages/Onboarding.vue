@@ -107,7 +107,7 @@ import gql from "graphql-tag";
 import { mapState, mapMutations } from "vuex";
 
 export default {
-  name: "login",
+  name: "onboarding",
   data() {
     return {
       activeContainer: null,
