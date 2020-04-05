@@ -38,11 +38,11 @@ export default {
     }`,
   },
   methods: {
-    removeOrder(continent){
-      let index = this.continents.indexOf(continent);
+    removeOrder(order){
+      let index = this.allOrders.indexOf(order);
 
       if(index > -1){
-        this.continents.splice(index, 1);
+        this.allOrders.splice(index, 1);
       }
     },
     presentAlertRadio() {
