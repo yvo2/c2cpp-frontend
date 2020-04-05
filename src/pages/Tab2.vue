@@ -1,6 +1,9 @@
 <template>
   <ion-page class="ion-page">
     <ion-content padding>
+      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-list v-if="openOrders.length > 0" lines="full" mode="ios">
         <ion-card v-for="order in openOrders" v-bind:key="order.id" class="order">
           <ion-card-header>
@@ -13,7 +16,7 @@
             <b>Address:</b>
             {{order.address}}
           </ion-card-content>
-          <button class="red" @click="removeOrder(order)">Deny</button>
+          <button class="red" @click="denyOrder(order)">Deny</button>
           <button class="green" @click="presentDeliveryAlert(order)">Accept</button>
         </ion-card>
       </ion-list>
@@ -47,25 +50,45 @@ export default {
     `
   },
   computed: {
-    ...mapState(['deniedOrderIds']),
+    ...mapState(["deniedOrderIds"]),
     openOrders() {
-      return this.allOrders ? this.allOrders.filter(order => order.status === "OPEN" && !this.deniedOrderIds.includes(order.id)) : []
+      return this.allOrders
+        ? this.allOrders.filter(
+            order =>
+              order.status === "OPEN" && !this.deniedOrderIds.includes(order.id)
+          )
+        : [];
     }
   },
   methods: {
-    ...mapMutations(['setDeniedOrderIds']),
+    ...mapMutations(["setDeniedOrderIds"]),
+    refresh(event) {
+      this.$apollo.queries.allOrders.refetch();
+      const self = this;
+      setTimeout(function() {
+        const isLoading = setInterval(function() {
+          if (!self.$apollo.queries.allOrders.loading) {
+            event.target.complete();
+            clearInterval(isLoading)
+          }
+        }, 100);
+      }, 500);
+    },
     removeOrder(order) {
       let index = this.allOrders.indexOf(order);
 
       if (index > -1) {
         this.allOrders.splice(index, 1);
       }
-
-      let deniedOrders = this.deniedOrderIds;
-      deniedOrders.push(order.id)
-      this.setDeniedOrderIds(deniedOrders)
     },
-    async assignOrder(order, delivery) {
+    denyOrder(order) {
+      let deniedOrders = this.deniedOrderIds;
+      deniedOrders.push(order.id);
+      this.setDeniedOrderIds(deniedOrders);
+
+      this.removeOrder(order);
+    },
+    assignOrder(order, delivery) {
       this.$apollo
         .mutate({
           mutation: gql`

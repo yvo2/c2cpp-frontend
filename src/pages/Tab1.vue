@@ -1,6 +1,9 @@
 <template>
   <ion-page class="ion-page">
     <ion-content padding>
+      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-list v-if="myOpenOrders.length > 0" lines="full" mode="ios">
         <ion-card v-for="order in myOpenOrders" v-bind:key="order.id">
           <ion-card-header>
@@ -58,6 +61,18 @@ export default {
     }
   },
   methods: {
+    refresh(event) {
+      this.$apollo.queries.myOrders.refetch();
+      const self = this;
+      setTimeout(function() {
+        const isLoading = setInterval(function() {
+          if (!self.$apollo.queries.myOrders.loading) {
+            event.target.complete();
+            clearInterval(isLoading)
+          }
+        }, 100);
+      }, 500);
+    },
     async completeOrder(order) {
       this.$apollo
         .mutate({
