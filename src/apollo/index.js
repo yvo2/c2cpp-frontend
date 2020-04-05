@@ -22,7 +22,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   })
 
 const apolloClient = new ApolloClient({
-    link: graphqlEndpoint.concat(authMiddleware),
+    link: authMiddleware.concat(graphqlEndpoint),
     cache: new InMemoryCache(),
     connectToDevTools: true
 })

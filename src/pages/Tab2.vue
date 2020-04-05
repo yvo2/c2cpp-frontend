@@ -1,97 +1,129 @@
 <template>
   <ion-page class="ion-page">
     <ion-content padding>
-      <ion-list lines="full" mode="ios">
-        <ion-card v-for="order in allOrders" v-bind:key="order.id">
+      <ion-list v-if="openOrders.length > 0" lines="full" mode="ios">
+        <ion-card v-for="order in openOrders" v-bind:key="order.id">
           <ion-card-header>
             <ion-card-title>{{order.sender}}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>
+          <ion-card-content style="text-align: left">
+            <b>Text:</b>
             {{order.text}}
+            <br />
+            <b>Address:</b>
+            {{order.address}}
           </ion-card-content>
           <button class="red" @click="removeOrder(order)">Deny</button>
-          <button class="green" @click="presentAlertRadio">Accept</button>
+          <button class="green" @click="presentDeliveryAlert(order)">Accept</button>
         </ion-card>
       </ion-list>
+      <p v-else>There are no open order right now! :)</p>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export default {
   name: "tab2",
   apollo: {
-    allOrders: gql`query GetOrders {
-      allOrders {
-        id,
-        text,
-        sender,
-        status,
-        assigned {
-          firstName,
-          lastName,
-          email
+    allOrders: gql`
+      query GetOrders {
+        allOrders {
+          id
+          text
+          sender
+          address
+          status
+          assigned {
+            firstName
+            lastName
+            email
+          }
         }
       }
-    }`,
+    `
+  },
+  computed: {
+    openOrders() {
+      return this.allOrders ? this.allOrders.filter(order => order.status === "OPEN") : []
+    }
   },
   methods: {
-    removeOrder(order){
+    removeOrder(order) {
       let index = this.allOrders.indexOf(order);
 
-      if(index > -1){
+      if (index > -1) {
         this.allOrders.splice(index, 1);
       }
     },
-    presentAlertRadio() {
+    async assignOrder(order, delivery) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($arrival: String!, $orderId: String!) {
+              assignToMe(arrival: $arrival, orderId: $orderId) {
+                status
+              }
+            }
+          `,
+          variables: {
+            arrival: delivery,
+            orderId: order.id
+          }
+        })
+        .then(() => {
+          this.removeOrder(order);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    presentDeliveryAlert(order) {
+      const self = this;
       return this.$ionic.alertController
         .create({
-          header: 'Select Timeframe',
+          header: "Select Timeframe",
           inputs: [
             {
-              type: 'radio',
-              label: 'now',
-              value: 'now',
-              checked: true,
+              type: "radio",
+              label: "now",
+              value: "now",
+              checked: true
             },
             {
-              type: 'radio',
-              label: 'in 1 Hour',
-              value: '1h',
+              type: "radio",
+              label: "in 1 Hour",
+              value: "1h"
             },
             {
-              type: 'radio',
-              label: 'in 3 Hours',
-              value: '3h',
+              type: "radio",
+              label: "in 3 Hours",
+              value: "3h"
             }
           ],
           buttons: [
             {
-              text: 'Cancel',
-              role: 'cancel',
-              cssClass: 'secondary',
-              handler: () => {
-                console.log('Cancelled')
-              },
+              text: "Cancel",
+              role: "cancel",
+              cssClass: "secondary"
             },
             {
-              text: 'Ok',
-              handler: () => {
-                console.log('Confirm Ok')
-              },
-            },
-          ],
+              text: "Ok",
+              handler: answer => {
+                self.assignOrder(order, answer);
+              }
+            }
+          ]
         })
-        .then(a => a.present())
-    },
+        .then(a => a.present());
+    }
   }
 };
 </script>
 
 <style>
-
 button {
   color: white;
   text-align: center;
@@ -118,5 +150,4 @@ ion-card button {
 .red:active {
   background-color: #db1731;
 }
-
 </style>

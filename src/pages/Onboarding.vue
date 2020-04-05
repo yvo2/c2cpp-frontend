@@ -99,7 +99,6 @@
         </form>
       </div>
     </ion-content>
-    <ion-alert-controller></ion-alert-controller>
   </ion-page>
 </template>
 
@@ -141,8 +140,7 @@ export default {
   methods: {
     ...mapMutations(["setAccessToken"]),
     showLoginError() {
-      document
-        .querySelector("ion-alert-controller")
+      this.$ionic.alertController
         .create({
           header: "Login failed!",
           message: `Could not login, please try again`,
@@ -229,8 +227,7 @@ export default {
         })
         .catch(error => {
           if (error.message.includes("EMAIL_EXIST")) {
-            document
-              .querySelector("ion-alert-controller")
+            this.$ionic.alertController
               .create({
                 header: "Email exists!",
                 message: `Email address "<strong>${signUpEmail}</strong>" already exists. Please use a different one or log in`,
