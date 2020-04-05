@@ -24,6 +24,7 @@
 
 <script>
 import gql from "graphql-tag";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "tab2",
@@ -46,17 +47,23 @@ export default {
     `
   },
   computed: {
+    ...mapState(['deniedOrderIds']),
     openOrders() {
-      return this.allOrders ? this.allOrders.filter(order => order.status === "OPEN") : []
+      return this.allOrders ? this.allOrders.filter(order => order.status === "OPEN" && !this.deniedOrderIds.includes(order.id)) : []
     }
   },
   methods: {
+    ...mapMutations(['setDeniedOrderIds']),
     removeOrder(order) {
       let index = this.allOrders.indexOf(order);
 
       if (index > -1) {
         this.allOrders.splice(index, 1);
       }
+
+      let deniedOrders = this.deniedOrderIds;
+      deniedOrders.push(order.id)
+      this.setDeniedOrderIds(deniedOrders)
     },
     async assignOrder(order, delivery) {
       this.$apollo
