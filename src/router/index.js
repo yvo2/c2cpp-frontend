@@ -31,8 +31,9 @@ export default new IonicVueRouter({
             ]
         },
         {
-            path: "/login",
-            alias: "/signup",
+            path: "/signup",
+            alias: "/login",
+            name: "signup",
             component: () =>
                 import("@/pages/Onboarding.vue"),
         }

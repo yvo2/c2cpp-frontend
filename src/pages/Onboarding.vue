@@ -132,7 +132,7 @@ export default {
     },
     accessToken: {
       handler: function(token) {
-        if (token) this.$router.push({ name: "tab1" });
+        if (token) this.$router.push({ name: "myOrders" });
       },
       immediate: true
     }

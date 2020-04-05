@@ -26,6 +26,8 @@
 import { people, basket } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
+import { mapState } from "vuex";
+
 addIcons({
   "ios-people": people.ios,
   "md-people": people.md,
@@ -34,6 +36,18 @@ addIcons({
 });
 
 export default {
-  name: "home"
+  name: "home",
+  watch: {
+    accessToken: {
+      handler: function(token) {
+        console.log(token)
+        if (!token) this.$router.push({ name: "signup" });
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...mapState(['accessToken'])
+  }
 };
 </script>
