@@ -2,7 +2,7 @@
   <ion-page class="ion-page">
     <ion-content padding>
       <ion-list v-if="openOrders.length > 0" lines="full" mode="ios">
-        <ion-card v-for="order in openOrders" v-bind:key="order.id">
+        <ion-card v-for="order in openOrders" v-bind:key="order.id" class="order">
           <ion-card-header>
             <ion-card-title>{{order.sender}}</ion-card-title>
           </ion-card-header>
@@ -130,7 +130,7 @@ button {
   padding: 0px 15px;
 }
 
-ion-card button {
+.order button {
   width: 50%;
   height: 30px;
 }
