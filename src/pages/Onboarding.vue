@@ -2,21 +2,80 @@
   <ion-page class="ion-page">
     <ion-content padding>
       <div class="form-structor">
-        <div class="signup" :class="{'slide-up': activeContainer === 'login'}">
+        <form
+          class="signup"
+          :class="{'slide-up': activeContainer === 'login'}"
+          @submit.prevent="signUp"
+          name="signUpForm"
+        >
           <router-link to="/signup" tag="div">
             <h2 class="form-title">
               <span>or</span>Sign up
             </h2>
           </router-link>
           <div class="form-holder">
-            <input type="text" class="input" placeholder="First name" />
-            <input type="text" class="input" placeholder="Last name" />
-            <input type="email" class="input" placeholder="Email" />
-            <input type="password" class="input" placeholder="Password" />
+            <ion-input
+              required
+              autocapitalize
+              autocomplete
+              type="text"
+              inputmode="text"
+              minlength="2"
+              class="input"
+              placeholder="First name"
+              :value="signUpFirstName"
+              @input="signUpFirstName = $event.target.value"
+            />
+            <ion-input
+              required
+              autocapitalize
+              autocomplete
+              type="text"
+              inputmode="text"
+              minlength="2"
+              class="input"
+              placeholder="Last name"
+              :value="signUpLastName"
+              @input="signUpLastName = $event.target.value"
+            />
+            <ion-input
+              required
+              autocapitalize
+              autocomplete
+              type="email"
+              inputmode="email"
+              class="input"
+              placeholder="Email"
+              :value="signUpEmail"
+              @input="signUpEmail = $event.target.value"
+            />
+            <ion-input
+              required
+              autocapitalize
+              autocomplete
+              type="password"
+              inputmode="password"
+              minlength="8"
+              class="input"
+              placeholder="Password"
+              :value="signUpPassword"
+              @input="signUpPassword = $event.target.value"
+            />
           </div>
-          <ion-button color="light" size="small" style="margin-top: 15px; width: 100%">Sign up</ion-button>
-        </div>
-        <div class="login" :class="{'slide-up': activeContainer === 'signup'}">
+          <ion-button color="light" size="small" style="margin-top: 15px; width: 100%">
+            Sign up
+            <input
+              type="submit"
+              style="visibility: hidden; width: 0; padding: 0; border: 0;"
+            />
+          </ion-button>
+        </form>
+        <form
+          class="login"
+          :class="{'slide-up': activeContainer === 'signup'}"
+          @submit.prevent="login"
+          name="loginForm"
+        >
           <div class="center">
             <router-link to="/login" tag="div">
               <h2 class="form-title">
@@ -24,23 +83,55 @@
               </h2>
             </router-link>
             <div class="form-holder">
-              <input type="email" class="input" placeholder="Email" />
-              <input type="password" class="input" placeholder="Password" />
+              <input
+                type="email"
+                class="input"
+                placeholder="Email"
+                :value="loginEmail"
+                @input="loginEmail = $event.target.value"
+              />
+              <input
+                type="password"
+                class="input"
+                placeholder="Password"
+                :value="loginPassword"
+                @input="loginPassword = $event.target.value"
+              />
             </div>
-            <ion-button color="medium" size="small" style="margin-top: 15px; width: 100%">Log in</ion-button>
+            <ion-button
+              type="submit"
+              color="medium"
+              size="small"
+              style="margin-top: 15px; width: 100%"
+            >
+              Log in
+              <input
+                type="submit"
+                style="visibility: hidden; width: 0; padding: 0; border: 0;"
+              />
+            </ion-button>
           </div>
-        </div>
+        </form>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
+import gql from "graphql-tag";
+
 export default {
   name: "login",
   data() {
     return {
-      activeContainer: null
+      activeContainer: null,
+      loginResult: null,
+      loginEmail: "",
+      loginPassword: "",
+      signUpFirstName: "",
+      signUpLastName: "",
+      signUpEmail: "",
+      signUpPassword: ""
     };
   },
   watch: {
@@ -53,7 +144,85 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push({ name: "tab1" });
+      const loginEmail = this.loginEmail;
+      const loginPassword = this.loginPassword;
+
+      this.loginEmail = "";
+      this.loginPassword = "";
+
+      this.$apollo
+        .query({
+          query: gql`
+            query($password: String!, $email: String!) {
+              login(password: $password, email: $email) {
+                accessToken
+                error
+              } 
+            }
+          `,
+          variables: {
+            password: loginPassword,
+            email: loginEmail
+          }
+        })
+        .then(res => {
+          if (res.data.error) {
+            // todo
+          } else {
+            console.log(res.data.accessToken)
+            this.$router.push({ name: "tab1" });
+          }
+        })
+        .catch(error => {
+          console.error(JSON.stringify(error.message));
+
+          this.loginEmail = loginEmail;
+          this.loginPassword = loginPassword;
+        });
+    },
+    signUp() {
+      const signUpFirstName = this.signUpFirstName;
+      const signUpLastName = this.signUpLastName;
+      const signUpEmail = this.signUpEmail;
+      const signUpPassword = this.signUpPassword;
+
+      this.signUpFirstName = "";
+      this.signUpLastName = "";
+      this.signUpEmail = "";
+      this.signUpPassword = "";
+
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($newUser: UserNew!) {
+              register(newUserData: $newUser) {
+                id
+              }
+            }
+          `,
+          variables: {
+            newUser: {
+              firstName: signUpFirstName,
+              lastName: signUpLastName,
+              email: signUpEmail,
+              password: signUpPassword
+            }
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.$router.push({ name: "tab1" });
+        })
+        .catch(error => {
+          if (error.message.includes("EMAIL_EXIST")) {
+            console.log("Email exists!")
+          }
+
+          this.signUpFirstName = signUpFirstName;
+          this.signUpLastName = signUpLastName;
+          this.signUpEmail = signUpEmail;
+          this.signUpPassword = signUpPassword;
+        });
     }
   }
 };
@@ -131,6 +300,7 @@ body {
     }
 
     .form-holder {
+      text-align: left;
       border-radius: 10px;
       background-color: #fff;
       overflow: hidden;
