@@ -62,13 +62,8 @@
               @input="signUpPassword = $event.target.value"
             />
           </div>
-          <ion-button color="light" size="small" style="margin-top: 15px; width: 100%">
-            Sign up
-            <input
-              type="submit"
-              style="visibility: hidden; width: 0; padding: 0; border: 0;"
-            />
-          </ion-button>
+          <input type="submit" style="visibility: hidden; width: 0; padding: 0; border: 0;" />
+          <ion-button color="light" size="small" style="width: 100%">Sign up</ion-button>
         </form>
         <form
           class="login"
@@ -98,18 +93,8 @@
                 @input="loginPassword = $event.target.value"
               />
             </div>
-            <ion-button
-              type="submit"
-              color="medium"
-              size="small"
-              style="margin-top: 15px; width: 100%"
-            >
-              Log in
-              <input
-                type="submit"
-                style="visibility: hidden; width: 0; padding: 0; border: 0;"
-              />
-            </ion-button>
+            <input type="submit" style="visibility: hidden; width: 0; padding: 0; border: 0;" />
+            <ion-button type="submit" color="medium" size="small" style="width: 100%">Log in</ion-button>
           </div>
         </form>
       </div>
@@ -120,6 +105,7 @@
 
 <script>
 import gql from "graphql-tag";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "login",
@@ -135,15 +121,25 @@ export default {
       signUpPassword: ""
     };
   },
+  computed: {
+    ...mapState(["accessToken"])
+  },
   watch: {
     $route: {
       handler: function(to) {
         this.activeContainer = to.path.substr(1);
       },
       immediate: true
+    },
+    accessToken: {
+      handler: function(token) {
+        if (token) this.$router.push({ name: "tab1" });
+      },
+      immediate: true
     }
   },
   methods: {
+    ...mapMutations(["setAccessToken"]),
     showLoginError() {
       document
         .querySelector("ion-alert-controller")
@@ -187,8 +183,7 @@ export default {
             this.loginEmail = loginEmail;
             this.loginPassword = loginPassword;
           } else {
-            console.log(res.data.login.accessToken);
-            this.$router.push({ name: "tab1" });
+            this.setAccessToken(res.data.login.accessToken);
           }
         })
         .catch(() => {
@@ -230,8 +225,7 @@ export default {
           }
         })
         .then(data => {
-          console.log(data.register.access.accessToken);
-          this.$router.push({ name: "tab1" });
+          this.setAccessToken(data.register.access.accessToken);
         })
         .catch(error => {
           if (error.message.includes("EMAIL_EXIST")) {
@@ -409,6 +403,7 @@ body {
       }
 
       .form-holder {
+        text-align: left;
         border-radius: 10px;
         background-color: #fff;
         border: 1px solid #eee;

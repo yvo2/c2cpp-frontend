@@ -7,5 +7,8 @@ ionic serve
 
 ionic build
 
-ionic capactiro add ios
+ionic capacitor add ios
 ionic capacitor run ios
+
+ionic capacitor add android
+ionic capacitor run android
