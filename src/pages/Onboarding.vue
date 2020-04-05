@@ -63,7 +63,7 @@
             />
           </div>
           <input type="submit" style="visibility: hidden; width: 0; padding: 0; border: 0;" />
-          <ion-button color="light" size="small" style="width: 100%">Sign up</ion-button>
+          <ion-button type="submit" color="light" size="small" style="width: 100%">Sign up</ion-button>
         </form>
         <form
           class="login"
@@ -222,8 +222,8 @@ export default {
             }
           }
         })
-        .then(data => {
-          this.setAccessToken(data.register.access.accessToken);
+        .then(res => {
+          this.setAccessToken(res.data.register.access.accessToken);
         })
         .catch(error => {
           if (error.message.includes("EMAIL_EXIST")) {
