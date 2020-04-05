@@ -1,15 +1,15 @@
 <template>
   <div>
     <ion-tabs>
-      <ion-tab tab="myOrders" :routes="['myOrders']">
+      <ion-tab tab="my-orders" :routes="['myOrders']">
         <ion-vue-router name="myOrders"></ion-vue-router>
       </ion-tab>
 
-      <ion-tab tab="allOrders" :routes="['allOrders']">
+      <ion-tab tab="all-orders" :routes="['allOrders']">
         <ion-vue-router name="allOrders"></ion-vue-router>
       </ion-tab>
 
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar slot="bottom" :selected-tab="selectedTab">
         <ion-tab-button tab="my-orders">
           <ion-icon name="basket" /> 
         </ion-tab-button>
@@ -38,12 +38,23 @@ addIcons({
 export default {
   name: "home",
   watch: {
+    $route: {
+      handler: function(to) {
+        this.selectedTab = to.path.substr(1);
+      },
+      immediate: true
+    },
     accessToken: {
       handler: function(token) {
         console.log(token)
         if (!token) this.$router.push({ name: "signup" });
       },
       immediate: true
+    }
+  },
+  data() {
+    return {
+      selectedTab: "",
     }
   },
   computed: {
